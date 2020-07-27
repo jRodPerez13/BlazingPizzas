@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using BlazingPizza.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazingPizza.Server
 {
@@ -25,6 +27,12 @@ namespace BlazingPizza.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            // Registrar el contexto de datos
+            services.AddDbContext<PizzaStoreContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString(
+                    "PizzaStoreContext"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

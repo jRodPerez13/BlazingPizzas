@@ -1,3 +1,35 @@
 ﻿@page "/"
+@inject HttpClient HttpClient
 
 <h1>Blazing Pizzas</h1>
+
+<div class="main">
+    <ul class="pizza-cards">
+        @if (Specials != null)
+        {
+            foreach (var Special in Specials)
+            {
+                <li style="background-image:url('@Special.ImageUrl')">
+                    <div class="pizza-info">
+                        <span class="title">@Special.Name</span>
+                        @Special.Description
+                        <span class="price">
+                            @Special.GetFormattedBasePrice()
+                        </span>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+
+@code{
+    List<PizzaSpecial> Specials;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Specials = await
+            HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("specials");
+
+    }
+}
