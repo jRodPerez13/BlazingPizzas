@@ -8,7 +8,8 @@
         {
             foreach (var Special in Specials)
             {
-                <li style="background-image:url('@Special.ImageUrl')">
+                <li @onclick="@(() => Console.WriteLine(Special.Name))"
+                    style="background-image:url('@Special.ImageUrl')">
                     <div class="pizza-info">
                         <span class="title">@Special.Name</span>
                         @Special.Description

@@ -201,7 +201,7 @@ body {
         margin-bottom: 0.25rem;
     }
 
-    .nav-tab.active img {
+        .nav-tab.active img {
         filter: brightness(0) saturate(100%) invert(93%) sepia(18%) saturate(797%) hue-rotate(316deg) brightness(109%) contrast(101%);
     }
 
