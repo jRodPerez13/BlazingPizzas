@@ -8,7 +8,7 @@
         {
             foreach (var Special in Specials)
             {
-                <li @onclick="@(() => Console.WriteLine(Special.Name))"
+                <li @onclick="@(() => ShowConfigurePizzaDialog(Special))"
                     style="background-image:url('@Special.ImageUrl')">
                     <div class="pizza-info">
                         <span class="title">@Special.Name</span>
@@ -24,7 +24,23 @@
 </div>
 
 @code{
-    List<PizzaSpecial> Specials;
+        Pizza ConfiguringPizza;
+        bool ShowingConfigureDialog;
+
+        void ShowConfigurePizzaDialog(PizzaSpecial special)
+        {
+            ConfiguringPizza = new Pizza()
+            {
+                Special = special,
+                SpecialId = special.Id,
+                Size = Pizza.DefaultSize,
+                Toppings = new List<PizzaTopping>(),
+            };
+            
+            ShowingConfigureDialog=true;
+        }
+
+        List<PizzaSpecial> Specials;
 
     protected async override Task OnInitializedAsync()
     {
