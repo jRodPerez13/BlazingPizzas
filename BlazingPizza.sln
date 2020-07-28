@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.Server", "Server\BlazingPizza.Server.csproj", "{8AECD6E9-9481-421A-A270-462D9A30A490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Server", "Server\BlazingPizza.Server.csproj", "{8AECD6E9-9481-421A-A270-462D9A30A490}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.Client", "Client\BlazingPizza.Client.csproj", "{2633909E-B4DB-4CD6-B695-26B2032EFF70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Client", "Client\BlazingPizza.Client.csproj", "{2633909E-B4DB-4CD6-B695-26B2032EFF70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.Shared", "Shared\BlazingPizza.Shared.csproj", "{ED9E04CD-8EBD-4959-8542-A87E42762544}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Shared", "Shared\BlazingPizza.Shared.csproj", "{ED9E04CD-8EBD-4959-8542-A87E42762544}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -23,6 +23,11 @@
     </ul>
 </div>
 
+@if(ShowingConfigureDialog)
+{
+    <ConfigurePizzaDialog Pizza="ConfiguringPizza"/>
+}
+
 @code{
         Pizza ConfiguringPizza;
         bool ShowingConfigureDialog;

@@ -1,0 +1,26 @@
+﻿<div class="dialog-container">
+    <div class="dialog">
+        <div class="dialog-title">
+            <h2>@Pizza.Special.Name</h2>
+            @Pizza.Special.Description
+        </div>
+        <form class="dialog-body">
+            <div class="dialog-buttons">
+                <button class="btn btn-secondary mr-auto">Cancelar</button>
+                <span class="mr-center">
+                    Precio:
+                    <span class="price">
+                        @Pizza.GetFormattedTotalPrice()
+                    </span>
+                </span>
+                <button class="btn btn-success ml-auto">Ordenar ></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public Pizza Pizza { get; set; }
+}
