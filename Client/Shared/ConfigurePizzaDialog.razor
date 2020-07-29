@@ -5,17 +5,29 @@
             @Pizza.Special.Description
         </div>
         <form class="dialog-body">
-            <div class="dialog-buttons">
-                <button class="btn btn-secondary mr-auto">Cancelar</button>
-                <span class="mr-center">
-                    Precio:
-                    <span class="price">
-                        @Pizza.GetFormattedTotalPrice()
-                    </span>
+            <div>
+                <label>Tamaño:</label>
+                <input type="range" 
+                       min="@Pizza.MinimumSize"
+                       max="@Pizza.MaximumSize"
+                       step="@Pizza.IncrementSize"
+                       @bind="Pizza.Size"
+                       @bind:event="oninput"/>
+                <span class="size-label" >
+                    @(Pizza.Size) cm ($@(Pizza.GetFormattedTotalPrice()))
                 </span>
-                <button class="btn btn-success ml-auto">Ordenar ></button>
             </div>
         </form>
+        <div class="dialog-buttons">
+            <button class="btn btn-secondary mr-auto">Cancelar</button>
+            <span class="mr-center">
+                Precio:
+                <span class="price">
+                    @Pizza.GetFormattedTotalPrice()
+                </span>
+            </span>
+            <button class="btn btn-success ml-auto">Ordenar ></button>
+        </div>
     </div>
 </div>
 
