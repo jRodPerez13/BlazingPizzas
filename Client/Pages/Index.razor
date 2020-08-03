@@ -25,32 +25,39 @@
 
 @if(ShowingConfigureDialog)
 {
-    <ConfigurePizzaDialog Pizza="ConfiguringPizza"/>
+    <ConfigurePizzaDialog Pizza="ConfiguringPizza"
+                          OnCancel="=CancelConfigurePizzaDialog"/>
 }
 
 @code{
-        Pizza ConfiguringPizza;
-        bool ShowingConfigureDialog;
+    Pizza ConfiguringPizza;
+    bool ShowingConfigureDialog;
 
-        void ShowConfigurePizzaDialog(PizzaSpecial special)
+    void ShowConfigurePizzaDialog(PizzaSpecial special)
+    {
+        ConfiguringPizza = new Pizza()
         {
-            ConfiguringPizza = new Pizza()
-            {
-                Special = special,
-                SpecialId = special.Id,
-                Size = Pizza.DefaultSize,
-                Toppings = new List<PizzaTopping>(),
-            };
-            
-            ShowingConfigureDialog=true;
-        }
+            Special = special,
+            SpecialId = special.Id,
+            Size = Pizza.DefaultSize,
+            Toppings = new List<PizzaTopping>(),
+        };
 
-        List<PizzaSpecial> Specials;
+        ShowingConfigureDialog=true;
+    }
+
+    List<PizzaSpecial> Specials;
 
     protected async override Task OnInitializedAsync()
     {
         Specials = await
             HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("specials");
 
+    }
+
+    void CancelConfigurePizzaDialog()
+    {
+        ConfiguringPizza = null;
+        ShowingConfigureDialog = false;
     }
 }
