@@ -436,3 +436,15 @@ input[type=range] {
         cursor: pointer;
         margin-top: 0;
     }
+    /*Delete Topping*/
+delete-topping {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0.2rem 0.2rem 0.3rem 0.2rem;
+    cursor: pointer;
+}
+
+    .delete-topping:hover {
+    color: yellow;
+    }

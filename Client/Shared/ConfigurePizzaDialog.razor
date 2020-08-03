@@ -1,4 +1,5 @@
-﻿<div class="dialog-container">
+﻿@inject HttpClient HttpClient
+<div class="dialog-container">
     <div class="dialog">
         <div class="dialog-title">
             <h2>@Pizza.Special.Name</h2>
@@ -16,6 +17,49 @@
                 <span class="size-label" >
                     @(Pizza.Size) cm ($@(Pizza.GetFormattedTotalPrice()))
                 </span>
+            </div>
+            <div >
+                <label>Complementos Adicionales:</label>
+                @if (Toppings == null)
+                {
+                    <select class="custom-select" disabled>
+                        <option>(Cargando...)</option>
+                    </select>
+                }
+                else if (Pizza.Toppings.Count >= 6)
+                {
+                    <div>(maximo alcanzado)</div>
+                }
+                else
+                {
+                    <select class="custom-select" @onchange="@ToppingSelected">
+                        <options value="-1" disable selected>(selecciona)
+                        </options>
+                        @for (var i = 0; i < Toppings.Count; i++)
+                        {
+                            <option value="@i">
+                                @Toppings[i].Name
+                                ($@(Toppings[i].GetFormattedPrice()))
+                            </option>
+                        }
+                    </select>
+                }
+
+            </div>
+            <div class="toppings">
+                @foreach (var topping in Pizza.Toppings)
+                {
+                    <div class="topping">
+                        @topping.Topping.Name
+                        <span class="topping-price">
+                            @topping.Topping.GetFormattedPrice()
+                        </span>
+                        <button type="button" class="delete-topping"
+                                @onclick="@(() => RemoveTopping(topping.Topping))">
+                            x
+                        </button>
+                    </div>
+                }
             </div>
         </form>
         <div class="dialog-buttons">
@@ -35,4 +79,35 @@
 
     [Parameter]
     public Pizza Pizza { get; set; }
+    //Almacenar lista de Topping
+    List<Topping> Toppings;
+    //Inicializar lista de Toppings
+    protected async override Task OnInitializedAsync()
+    {
+        Toppings = await
+            HttpClient.GetFromJsonAsync<List<Topping>>("toppings");
+    }
+    //Agregar un Topping
+    void AddTopping(Topping topping)
+    {
+        if(Pizza.Toppings.Find(pt => pt.Topping == topping) == null)
+        {
+            Pizza.Toppings.Add(new PizzaTopping { Topping = topping });
+        }
+    }
+    //Elimina un Topping
+    void RemoveTopping(Topping topping)
+    {
+        Pizza.Toppings.RemoveAll(pt => pt.Topping == topping);
+    }
+    //Agrega un elemento a la lista toppings
+    void ToppingSelected(ChangeEventArgs e)
+    {
+        if(int.TryParse(e.Value.ToString(), out var index) && index >= 0)
+        {
+            AddTopping(Toppings[index]);
+        }
+    }
+
+
 }
