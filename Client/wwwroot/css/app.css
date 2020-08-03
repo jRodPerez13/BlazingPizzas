@@ -444,7 +444,6 @@ delete-topping {
     padding: 0.2rem 0.2rem 0.3rem 0.2rem;
     cursor: pointer;
 }
-
-    .delete-topping:hover {
+.delete-topping:hover {
     color: yellow;
     }

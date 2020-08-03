@@ -33,7 +33,7 @@
                 else
                 {
                     <select class="custom-select" @onchange="@ToppingSelected">
-                        <options value="-1" disable selected>(selecciona)
+                        <options value="-1" disabled selected>(selecciona)
                         </options>
                         @for (var i = 0; i < Toppings.Count; i++)
                         {
@@ -56,7 +56,7 @@
                         </span>
                         <button type="button" class="delete-topping"
                                 @onclick="@(() => RemoveTopping(topping.Topping))">
-                            x
+                            X
                         </button>
                     </div>
                 }
