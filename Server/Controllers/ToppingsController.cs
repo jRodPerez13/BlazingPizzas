@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazingPizza.Server.Controllers
 {
-    [Route("toppings]")]
+    [Route("toppings")]
     [ApiController]
     public class ToppingsController : ControllerBase
     {
