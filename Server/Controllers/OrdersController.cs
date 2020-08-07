@@ -62,5 +62,24 @@ namespace BlazingPizza.Server.Controllers
             return orders.Select(
                 o => OrderWithStatus.FromOrder(o)).ToList();
         }
+        //Detalle orden por ID
+        [HttpGet("{orderId}")]
+        public async Task<ActionResult<OrderWithStatus>> GetOrderWithStatus(
+            int orderId)
+        {
+            var order = await Context.Orders
+                .Where(o => o.OrderId == orderId)
+                .Include(o => o.DeliveryLocation)
+                .Include(o => o.Pizzas).ThenInclude(p => p.Special)
+                .Include(o => o.Pizzas).ThenInclude(p => p.Toppings)
+                .ThenInclude(t => t.Topping)
+                .SingleOrDefaultAsync();
+
+            if(order==null)
+            {
+                return NotFound();
+            }
+            return OrderWithStatus.FromOrder(order);
+        }
     }
 }
