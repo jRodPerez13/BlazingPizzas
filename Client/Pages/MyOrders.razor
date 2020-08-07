@@ -17,7 +17,7 @@
             {
                 <div class="list-group-item">
                     <div class="col">
-                        <h5>@Item.Order.CreatedTime.ToLongDateString()</h5>
+                        <h5>@Item.Order.GetFormattedCreatedTime()</h5>
                         Pizzas:
                         <strong>@Item.Order.Pizzas.Count()</strong>
                         Precio total:
