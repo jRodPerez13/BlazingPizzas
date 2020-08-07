@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BlazingPizza.Server.Models;
 using BlazingPizza.Shared;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazingPizza.Server.Controllers
 {
@@ -42,7 +44,23 @@ namespace BlazingPizza.Server.Controllers
 
             Context.Orders.Attach(order);
             await Context.SaveChangesAsync();
-            return order.OrderId;            
+            return order.OrderId;
+        }
+
+        //Devolverá la lista de órdenes
+        [HttpGet]
+        public async Task<ActionResult<List<OrderWithStatus>>> GetOrders()
+        {
+            var orders = await Context.Orders
+                .Include(o => o.DeliveryLocation)
+                .Include(o => o.Pizzas).ThenInclude(p => p.Special)
+                .Include(o => o.Pizzas).ThenInclude(p => p.Toppings)
+                .ThenInclude(t => t.Topping)
+                .OrderByDescending(o => o.CreatedTime)
+                .ToListAsync();
+
+            return orders.Select(
+                o => OrderWithStatus.FromOrder(o)).ToList();
         }
     }
 }
