@@ -586,3 +586,42 @@ input[type=range] {
     font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
     text-transform: uppercase;
 }
+/*Detalle orden*/
+.track-order {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+    .track-order > div {
+        overflow-y: hidden;
+    }
+
+.track-order-title {
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    padding: 1rem 3rem;
+}
+
+    .track-order-title h2 {
+        color: #c03939;
+        font-size: 1.3rem;
+        font-weight: 300;
+        margin: 0rem;
+        font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+    }
+
+.track-order-body {
+    flex-grow: 1;
+    display: flex;
+}
+
+.track-order-details {
+    overflow-y: auto;
+    padding: 1.5rem 3rem;
+    flex-grow: 1;
+}

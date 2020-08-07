@@ -2,7 +2,32 @@
 @inject HttpClient HttpClient
 @page "/myorders/{orderId:int}"
 <div class="main">
-    Mostrar el detalle de la orden @OrderId
+    @if (InvalidOrder)
+    {
+        <h2>¡No!</h2>
+        <p>Lo sentimos, esta orden no puede ser cargada.</p>
+    }
+    else if (OrderWithStatus == null)
+    {
+        <text>Cargando...</text>
+    }
+    else
+    {
+        <div class="track-order">
+            <div class="track-order-title">
+                <h2>
+                    Pedido realizado
+                    @OrderWithStatus.Order.CreatedTime.ToLongDateString()
+                </h2>
+                <p class="ml-auto mb-0">
+                    Estatus: <strong>@OrderWithStatus.StatusText</strong>
+                </p>
+            </div>
+            <div class="track-order-details">
+                <OrderReview Order="@OrderWithStatus.Order"/>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
