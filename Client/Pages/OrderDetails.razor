@@ -1,5 +1,7 @@
 ﻿@using System.Threading
 @inject HttpClient HttpClient
+@implements IDisposable
+
 @page "/myorders/{orderId:int}"
     <div class="main">
         @if (InvalidOrder)
@@ -91,4 +93,9 @@
         PollForUpdates();
     }
 
+    //Libera recursos de ram y cpu
+    void IDisposable.Dispose()
+    {
+        PollingCancellationToken?.Cancel();
+    }
 }
