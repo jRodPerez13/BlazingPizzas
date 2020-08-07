@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
 
 
 <div class="main">
@@ -111,8 +112,12 @@
 
     async Task PlaceOrder()
     {
+        var Response=
         await HttpClient.PostAsJsonAsync("orders", Order);
+        var NewOrderId =
+            await Response.Content.ReadFromJsonAsync<int>();
         //Listo para otra orden
         Order = new Order();
+        NavigationManager.NavigateTo($"myorders/{NewOrderId}");
     }
 }
