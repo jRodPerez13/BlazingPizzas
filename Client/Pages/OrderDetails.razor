@@ -72,6 +72,13 @@
                 InvalidOrder = true;
                 PollingCancellationToken.Cancel();
                 Console.Error.WriteLine(ex);
+
+                //Liberar recursos por estatus
+                if(OrderWithStatus.StatusText=="Entregado")
+                {
+                    PollingCancellationToken.Cancel();
+                }
+
             }
             // Necesitamos invocar StateHasChanged para indicarle a Blazor
             // que los datos del componente posiblemente han cambiado.
