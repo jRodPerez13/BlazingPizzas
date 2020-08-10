@@ -63,6 +63,11 @@
                 OrderWithStatus =
                 await HttpClient.GetFromJsonAsync<OrderWithStatus>(
                 $"orders/{OrderId}");
+                //Liberar recursos por estatus
+                if (OrderWithStatus.StatusText == "Entregado")
+                {
+                    PollingCancellationToken.Cancel();
+                }
             }
             catch (Exception ex)
             {
@@ -72,12 +77,6 @@
                 InvalidOrder = true;
                 PollingCancellationToken.Cancel();
                 Console.Error.WriteLine(ex);
-
-                //Liberar recursos por estatus
-                if(OrderWithStatus.StatusText=="Entregado")
-                {
-                    PollingCancellationToken.Cancel();
-                }
 
             }
             // Necesitamos invocar StateHasChanged para indicarle a Blazor
