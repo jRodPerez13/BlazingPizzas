@@ -1,0 +1,33 @@
+﻿@page "/checkout"
+@using BlazingPizza.Client.Services
+@inject OrderState OrderState
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
+
+<div class="main">
+    <div class="checkout-cols">
+        <div class="checkout-order-details">
+            <h4>Revisar la orden</h4>
+            <OrderReview Order="OrderState.Order" />
+        </div>
+    </div>
+
+    <button class="checkout-button btn btn-warning" @onclick="PlaceOrder">
+        Aceptar la orden
+    </button>
+</div>
+
+@code {
+
+    async Task PlaceOrder()
+    {
+        var Response =
+        await HttpClient.PostAsJsonAsync("orders", OrderState.Order);
+        var NewOrderId =
+            await Response.Content.ReadFromJsonAsync<int>();
+        //Listo para otra orden
+        OrderState.ResetOrder();
+        NavigationManager.NavigateTo($"myorders/{NewOrderId}");
+    }
+
+}
