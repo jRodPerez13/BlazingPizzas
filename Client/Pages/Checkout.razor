@@ -10,6 +10,10 @@
             <h4>Revisar la orden</h4>
             <OrderReview Order="OrderState.Order" />
         </div>
+        <div>
+            <h4>Enviar a...</h4>
+            <AddressEditor Address="@OrderState.Order.DeliveryAddress" />
+        </div>
     </div>
 
     <button class="checkout-button btn btn-warning" @onclick="PlaceOrder">
