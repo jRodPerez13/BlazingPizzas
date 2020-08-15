@@ -5,20 +5,25 @@
 @inject HttpClient HttpClient
 
 <div class="main">
-    <div class="checkout-cols">
-        <div class="checkout-order-details">
-            <h4>Revisar la orden</h4>
-            <OrderReview Order="OrderState.Order" />
+    <EditForm Model="OrderState.Order.DeliveryAddress" 
+              OnValidSubmit="PlaceOrder">
+        <div class="checkout-cols">
+            <div class="checkout-order-details">
+                <h4>Revisar la orden</h4>
+                <OrderReview Order="OrderState.Order" />
+            </div>
+            <div>
+                <h4>Enviar a...</h4>
+                <AddressEditor Address="@OrderState.Order.DeliveryAddress" />
+            </div>
         </div>
-        <div>
-            <h4>Enviar a...</h4>
-            <AddressEditor Address="@OrderState.Order.DeliveryAddress" />
-        </div>
-    </div>
 
-    <button class="checkout-button btn btn-warning" @onclick="PlaceOrder">
-        Aceptar la orden
-    </button>
+        <button type="submit" class="checkout-button btn btn-warning">
+            Aceptar la orden
+        </button>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
 </div>
 
 @code {
