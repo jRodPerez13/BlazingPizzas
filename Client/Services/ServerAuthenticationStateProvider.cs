@@ -7,9 +7,9 @@ using System.Security.Claims;
 
 namespace BlazingPizza.Client.Services
 {
-    public class ServerAuthenticationStateProvider:AuthenticationStateProvider
+    public class ServerAuthenticationStateProvider : AuthenticationStateProvider
     {
-        public override Task<AuthenticationState> 
+        public override async Task<AuthenticationState> 
             GetAuthenticationStateAsync()
         {
             // Por el momento sólo devolvemos datos falsos
