@@ -4,4 +4,4 @@
         set: (key, value) => { localStorage[key] = JSON.stringify(value); },
         delete: key => { delete localStorage[key]; }
     };
-})();
+})();
