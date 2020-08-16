@@ -29,15 +29,18 @@ namespace BlazingPizza.Server.Controllers
         {
             order.CreatedTime = DateTime.Now;
             //Establece una ubicacion de envio ficticia
-            order.DeliveryLocation= 
+            order.DeliveryLocation =
                 new LatLong(19.043679206924864, -98.19811254438645);
             // Establecer el valor de Pizza.SpecialId y Topping.ToppingId
             // para que no se creen nuevos registros Special y Topping.
-            foreach(var pizza in order.Pizzas)
+
+            order.UserId = GetUserId();
+
+            foreach (var pizza in order.Pizzas)
             {
                 pizza.SpecialId = pizza.Special.Id;
                 pizza.Special = null;
-                foreach(var topping in pizza.Toppings)
+                foreach (var topping in pizza.Toppings)
                 {
                     topping.ToppingId = topping.Topping.Id;
                     topping.Topping = null;
@@ -54,6 +57,7 @@ namespace BlazingPizza.Server.Controllers
         public async Task<ActionResult<List<OrderWithStatus>>> GetOrders()
         {
             var orders = await Context.Orders
+                .Where(o => o.UserId == GetUserId())
                 .Include(o => o.DeliveryLocation)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Special)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Toppings)
@@ -70,6 +74,7 @@ namespace BlazingPizza.Server.Controllers
             int orderId)
         {
             var order = await Context.Orders
+                .Where(o => o.UserId == GetUserId())
                 .Where(o => o.OrderId == orderId)
                 .Include(o => o.DeliveryLocation)
                 .Include(o => o.Pizzas).ThenInclude(p => p.Special)
@@ -77,11 +82,20 @@ namespace BlazingPizza.Server.Controllers
                 .ThenInclude(t => t.Topping)
                 .SingleOrDefaultAsync();
 
-            if(order==null)
+            if (order == null)
             {
                 return NotFound();
             }
             return OrderWithStatus.FromOrder(order);
         }
+
+        private string GetUserId()
+        {
+            return HttpContext.User.FindFirst(
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+        }
+
+
+
     }
 }
