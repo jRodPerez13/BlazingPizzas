@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject HttpClient HttpClient
-
-<h1>Blazing Pizzas</h1>
+@inject NavigationManager NavigationManager
+@inject OrderState OrderState
 
 <div class="main">
     <ul class="pizza-cards">
@@ -9,7 +9,8 @@
         {
             foreach (var Special in Specials)
             {
-                <li style="background-image:url('@Special.ImageUrl')">
+                <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(Special))"
+                    style="background-image:url('@Special.ImageUrl')">
                     <div class="pizza-info">
                         <span class="title">@Special.Name</span>
                         @Special.Description
@@ -23,6 +24,45 @@
     </ul>
 </div>
 
+<div class="sidebar">
+    @if(OrderState.Order.Pizzas.Any())
+    {
+        <div class="order-contents">
+            <h2>Tu orden</h2>
+            @foreach(var ConfiguredPizza in OrderState.Order.Pizzas)
+            {
+                <ConfiguredPizzaItem Pizza="ConfiguredPizza"
+                                     OnRemoved=
+                                     "@(() => 
+                                        OrderState.RemoveConfigurePizzaDialog(ConfiguredPizza))"
+                                     />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">Selecciona una pizza 
+        <br/> para empezar</div>
+    }
+    @*Cuando no haya pizzas oculta el total*@
+<div class="order-total @(OrderState.Order.Pizzas.Any()?"":"hidden")">
+    Total:
+    <span class="total-price">@OrderState.Order.GetFormattedTotalPrice()</span>
+    <button class="btn btn-warning"
+            disabled="@(OrderState.Order.Pizzas.Count == 0)" 
+            @onclick="@PlaceOrder">
+        Ordenar >
+    </button>
+</div>
+</div>
+
+@if(OrderState.ShowingConfigureDialog)
+{
+    <ConfigurePizzaDialog Pizza="OrderState.ConfiguringPizza"
+                          OnCancel="OrderState.CancelConfigurePizzaDialog"
+                          OnConfirm="OrderState.ConfirmConfigurePizzaDialog"/>
+}
+
 @code{
     List<PizzaSpecial> Specials;
 
@@ -32,4 +72,16 @@
             HttpClient.GetFromJsonAsync<List<PizzaSpecial>>("specials");
 
     }
+
+    async Task PlaceOrder()
+    {
+        var Response=
+        await HttpClient.PostAsJsonAsync("orders", OrderState.Order);
+        var NewOrderId =
+            await Response.Content.ReadFromJsonAsync<int>();
+        //Listo para otra orden
+        OrderState.ResetOrder();
+        NavigationManager.NavigateTo($"myorders/{NewOrderId}");
+    }
+    
 }
