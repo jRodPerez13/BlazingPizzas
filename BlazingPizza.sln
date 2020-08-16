@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Server", "Server\BlazingPizza.Server.csproj", "{8AECD6E9-9481-421A-A270-462D9A30A490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.Server", "Server\BlazingPizza.Server.csproj", "{8AECD6E9-9481-421A-A270-462D9A30A490}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Client", "Client\BlazingPizza.Client.csproj", "{2633909E-B4DB-4CD6-B695-26B2032EFF70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.Client", "Client\BlazingPizza.Client.csproj", "{2633909E-B4DB-4CD6-B695-26B2032EFF70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Shared", "Shared\BlazingPizza.Shared.csproj", "{ED9E04CD-8EBD-4959-8542-A87E42762544}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.ComponentsLibrary", "BlazingPizza.ComponentsLibrary\BlazingPizza.ComponentsLibrary.csproj", "{87A77CE2-6BA3-4ECC-9D6B-78C02F36E7D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.Shared", "Shared\BlazingPizza.Shared.csproj", "{ED9E04CD-8EBD-4959-8542-A87E42762544}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{ED9E04CD-8EBD-4959-8542-A87E42762544}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED9E04CD-8EBD-4959-8542-A87E42762544}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED9E04CD-8EBD-4959-8542-A87E42762544}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87A77CE2-6BA3-4ECC-9D6B-78C02F36E7D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87A77CE2-6BA3-4ECC-9D6B-78C02F36E7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87A77CE2-6BA3-4ECC-9D6B-78C02F36E7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87A77CE2-6BA3-4ECC-9D6B-78C02F36E7D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
