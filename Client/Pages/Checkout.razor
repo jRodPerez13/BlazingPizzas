@@ -5,25 +5,31 @@
 @inject HttpClient HttpClient
 
 <div class="main">
-    <EditForm Model="OrderState.Order.DeliveryAddress" 
-              OnValidSubmit="PlaceOrder">
-        <div class="checkout-cols">
-            <div class="checkout-order-details">
-                <h4>Revisar la orden</h4>
-                <OrderReview Order="OrderState.Order" />
-            </div>
-            <div>
-                <h4>Enviar a...</h4>
-                <AddressEditor Address="@OrderState.Order.DeliveryAddress" />
-            </div>
-        </div>
-
-        <button type="submit" class="checkout-button btn btn-warning"
-                disabled="@IsSubmitting">
-            Aceptar la orden
-        </button>
-        <DataAnnotationsValidator />
-    </EditForm>
+    <AuthorizeView Context="AuthContext">
+        <NotAuthorized>
+            <h2>Redirigiéndote...</h2>
+        </NotAuthorized>
+        <Authorized>
+            <EditForm Model="OrderState.Order.DeliveryAddress"
+            OnValidSubmit="PlaceOrder">
+                <div class="checkout-cols">
+                    <div class="checkout-order-details">
+                        <h4>Revisar la orden</h4>
+                        <OrderReview Order="OrderState.Order" />
+                    </div>
+                    <div>
+                        <h4>Enviar a...</h4>
+                        <AddressEditor Address="@OrderState.Order.DeliveryAddress" />
+                    </div>
+                </div>
+                <button type="submit" class="checkout-button btn btn-warning"
+                        disabled="@IsSubmitting">
+                    Aceptar la orden
+                </button>
+            <DataAnnotationsValidator />
+            </EditForm>
+        </Authorized>
+    </AuthorizeView>
 </div>
 
 @code {
@@ -50,5 +56,19 @@
 
 
     }
+
+    [CascadingParameter]
+    Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var AuthState = await AuthenticationStateTask;
+
+        if (!AuthState.User.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo(
+                "user/signin?redirectUri=/checkout", true);
+        }
+    }
+
 
 }
