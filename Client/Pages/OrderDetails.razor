@@ -1,0 +1,107 @@
+﻿@using System.Threading
+@inject HttpClient HttpClient
+@implements IDisposable
+
+@page "/myorders/{orderId:int}"
+    <div class="main">
+        @if (InvalidOrder)
+        {
+            <h2>¡No!</h2>
+            <p>Lo sentimos, esta orden no puede ser cargada.</p>
+        }
+        else if (OrderWithStatus == null)
+        {
+            <text>Cargando...</text>
+        }
+        else
+        {
+            <div class="track-order">
+                <div class="track-order-title">
+                    <h2>
+                        Pedido realizado
+                        @OrderWithStatus.Order.GetFormattedCreatedTime()
+                    </h2>
+                    <p class="ml-auto mb-0">
+                        Estatus: <strong>@OrderWithStatus.StatusText</strong>
+                    </p>
+                </div>
+                <div class="track-order-body">
+                    <div class="track-order-details">
+                        <OrderReview Order="@OrderWithStatus.Order" />
+                    </div>
+                </div>                
+            </div>
+        }
+    </div>
+
+@code {
+    [Parameter]
+    public int OrderId { get; set; }
+
+    OrderWithStatus OrderWithStatus;
+    bool InvalidOrder;
+    CancellationTokenSource PollingCancellationToken;
+
+    // Utilizaremos un método async void para representar un polling.
+    // Este método se ejecutará por un largo tiempo incluso cuando
+    // otros métodos se estén ejecutando.
+    private async void PollForUpdates()
+    {
+        // Utilizamos CancellationTokenSource como una forma de señalizar
+        // cuando el polling debe detenerse.
+        PollingCancellationToken = new CancellationTokenSource();
+        while (!PollingCancellationToken.IsCancellationRequested)
+        {
+            // Los métodos async void no tienen forma de reportar
+            // excepciones a los invocadores porque típicamente
+            // estos ya habrán finalizado. Por eso es importante
+            // utilizar try/catch y manejar apropiadamente cualquier
+            // excepción que pueda ocurrir.
+            try
+            {
+                InvalidOrder = false;
+                OrderWithStatus =
+                await HttpClient.GetFromJsonAsync<OrderWithStatus>(
+                $"orders/{OrderId}");
+                //Liberar recursos por estatus
+                if (OrderWithStatus.StatusText == "Entregado")
+                {
+                    PollingCancellationToken.Cancel();
+                }
+            }
+            catch (Exception ex)
+            {
+                // En nuestro caso, el polling se detendrá cuando
+                // haya una excepción. Más adelante agregaremos
+                // otra condición para detenerse.
+                InvalidOrder = true;
+                PollingCancellationToken.Cancel();
+                Console.Error.WriteLine(ex);
+
+            }
+            // Necesitamos invocar StateHasChanged para indicarle a Blazor
+            // que los datos del componente posiblemente han cambiado.
+            // El framework entonces procederá a renderizar el componente.
+            // No existe otra forma de que el framework sepa cuando volver
+            // a renderizar el componente ya que no conoce la lógica del
+            // polling.
+            StateHasChanged();
+            // Cada 4 segundos solicitará nuevos datos al servidor.
+            await Task.Delay(4000);
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        // Si ya estamos haciendo un polling de otra orden, detenerlo.
+        PollingCancellationToken?.Cancel();
+        // Iniciar un nuevo ciclo de sondeo o polling.
+        PollForUpdates();
+    }
+
+    //Libera recursos de ram y cpu
+    void IDisposable.Dispose()
+    {
+        PollingCancellationToken?.Cancel();
+    }
+}
