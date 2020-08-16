@@ -1,6 +1,7 @@
 ﻿@using System.Threading
 @inject HttpClient HttpClient
 @implements IDisposable
+@attribute [Authorize]
 
 @page "/myorders/{orderId:int}"
     <div class="main">
