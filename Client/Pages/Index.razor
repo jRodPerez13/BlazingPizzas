@@ -2,6 +2,7 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @inject OrderState OrderState
+@inject IJSRuntime JSRuntime
 
 <div class="main">
     <ul class="pizza-cards">
@@ -33,9 +34,7 @@
             {
                 <ConfiguredPizzaItem Pizza="ConfiguredPizza"
                                      OnRemoved=
-                                     "@(() => 
-                                        OrderState.RemoveConfigurePizzaDialog(ConfiguredPizza))"
-                                     />
+                                     "@(() => RemovePizza(ConfiguredPizza))" />
             }
         </div>
     }
@@ -72,6 +71,14 @@
 
     }
 
-    
-    
+    async Task RemovePizza(Pizza configuredPizza)
+    {
+        if(await JSRuntime.Confirm(
+            $"¿Eliminar la pizza {configuredPizza.Special.Name} " +
+            $"de la orden?"))
+        {
+            OrderState.RemoveConfigurePizzaDialog(configuredPizza);
+        }
+    }
+
 }
