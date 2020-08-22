@@ -626,6 +626,12 @@ input[type=range] {
     flex-grow: 1;
 }
 
+/*Map*/
+.track-order-map{
+    width:50%;
+    flex-shrink:0;
+}
+
 /*Checkout*/
 .checkout-cols{
     display:flex;
