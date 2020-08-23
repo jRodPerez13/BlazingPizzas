@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.Shared", "Shar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.ComponentsLibrary", "BlazingPizza.ComponentsLibrary\BlazingPizza.ComponentsLibrary.csproj", "{87A77CE2-6BA3-4ECC-9D6B-78C02F36E7D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazingPizza.TemplatedComponents", "BlazingPizza.TemplatedComponents\BlazingPizza.TemplatedComponents.csproj", "{CD8C9082-C649-4077-9DDD-597C3ED4B32C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazingPizza.TemplatedComponents", "BlazingPizza.TemplatedComponents\BlazingPizza.TemplatedComponents.csproj", "{CD8C9082-C649-4077-9DDD-597C3ED4B32C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
