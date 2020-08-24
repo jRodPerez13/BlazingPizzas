@@ -13,6 +13,7 @@ namespace BlazingPizza.Server.Models
         public DbSet<Topping> Toppings { get; set; }
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
 
 
         public PizzaStoreContext(

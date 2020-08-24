@@ -89,8 +89,21 @@
                 NavigationManager.NavigateTo("");
             }
         }
-
+        // En segundo plano, preguntar al usuario si desea ser notificado
+        // con las actualizaciones de la orden
+        await RequestNotificationSubscriptionAsync();
     }
 
+    async Task RequestNotificationSubscriptionAsync()
+    {
+        var Subscription =
+            await JSRuntime.InvokeAsync<NotificationSubscription>(
+                "blazorPushNotifications.requestSubscription");
+        if(Subscription!=null)
+        {
+            await HttpClient.PutAsJsonAsync(
+                "notification/subscribe", Subscription);
+        }
+    }
 
 }
