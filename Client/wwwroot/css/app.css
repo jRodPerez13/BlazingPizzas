@@ -625,3 +625,124 @@ input[type=range] {
     padding: 1.5rem 3rem;
     flex-grow: 1;
 }
+
+/*Map*/
+.track-order-map{
+    width:50%;
+    flex-shrink:0;
+}
+
+/*Checkout*/
+.checkout-cols{
+    display:flex;
+}
+
+    .checkout-cols h4{
+        margin-bottom:1.5rem;
+    }
+    .checkout-cols > div{
+        flex:1;
+        margin:1rem;
+        border: 1px solid #ddd;
+        background: rgba(255,255,255,0.3);
+        padding:1.25rem 1rem;
+    }
+    .checkout-cols > div:first-child {
+        margin-left: 0;
+    }
+
+    .checkout-cols > div:last-child {
+        margin-right: 0;
+    }
+
+.checkout-button {
+    margin: auto;
+    display: block;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 0.4rem 1.2rem;
+}
+/*Validation*/
+.form-field {
+    display: flex;
+    margin: 0.5rem;
+}
+
+    .form-field > label {
+        width: 8rem;
+    }
+
+    .form-field > div {
+        flex-grow: 1;
+    }
+
+    .form-field input {
+        width: 100%;
+    }
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+/*Autorización y autenticación*/
+.user-info{
+    margin-left:auto;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+}
+    
+    .user-info img{
+        margin-right:0.7rem;
+        width:2.6rem;
+    }
+
+    .user-info .username{
+        display:block;
+        font-weight:700;
+        line-height:0.7rem;
+        margin-top:0.5rem;
+    }
+
+    .user-info a{
+        color: #fff2cc;
+        font-size:0.8rem;
+    }
+
+a.sign-in {
+    background: none;
+    border: 1.5px solid white;
+    border-radius: 0.7em;
+    color: white;
+    text-transform: uppercase;
+    padding: 0.2rem 0.8rem 0.1rem 0.8rem;
+    font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
+    font-weight:100;
+    cursor:pointer;
+    transition:0.2s ease-out;
+}
+
+    a.sign-in:hover{
+        background-color: rgba(255,255,255,0.3);
+        color:#fff2cc;
+        border-color:#fff2cc;
+    }
+
+.user-info a.sign-out{
+    color:#fff2cc;
+    font-size:0.8rem;
+    cursor:pointer;
+}
+
+    .user-info a.sign-out.hover{
+        text-decoration:underline;
+    }

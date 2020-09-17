@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using BlazingPizza.Server.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace BlazingPizza.Server
 {
@@ -30,9 +32,30 @@ namespace BlazingPizza.Server
             // Registrar el contexto de datos
             services.AddDbContext<PizzaStoreContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString(
-                    "PizzaStoreContext"));
+                //Actualizando cadena de conexión a Sqlite
+                options.UseSqlite("Data Source=PizzaStore.db");
             });
+            //Autorizacion Twitter y registro del servicio de autenticaci�n
+            services.AddAuthentication(options => 
+            {
+                options.DefaultScheme =
+                CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddCookie()
+                .AddTwitter(twitterOptions =>
+                {
+                    twitterOptions.ConsumerKey =
+                    Configuration["Authentication:Twitter:ConsumerKey"];
+
+                    twitterOptions.ConsumerSecret=
+                    Configuration["Authentication:Twitter:ConsumerSecret"];
+                    twitterOptions.Events.OnRemoteFailure = (context) =>
+                    {
+                        context.HandleResponse();
+                        return context.Response.WriteAsync(
+                            "<script>window.close();</script>");
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +78,9 @@ namespace BlazingPizza.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+            //middleware
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

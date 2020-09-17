@@ -1,0 +1,109 @@
+﻿@page "/checkout"
+@using BlazingPizza.Client.Services
+@inject OrderState OrderState
+@inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+
+<div class="main">
+    <AuthorizeView Context="AuthContext">
+        <NotAuthorized>
+            <h2>Redirigiéndote...</h2>
+        </NotAuthorized>
+        <Authorized>
+            <EditForm Model="OrderState.Order.DeliveryAddress"
+            OnValidSubmit="PlaceOrder">
+                <div class="checkout-cols">
+                    <div class="checkout-order-details">
+                        <h4>Revisar la orden</h4>
+                        <OrderReview Order="OrderState.Order" />
+                    </div>
+                    <div>
+                        <h4>Enviar a...</h4>
+                        <AddressEditor Address="@OrderState.Order.DeliveryAddress" />
+                    </div>
+                </div>
+                <button type="submit" class="checkout-button btn btn-warning"
+                        disabled="@IsSubmitting">
+                    Aceptar la orden
+                </button>
+            <DataAnnotationsValidator />
+            </EditForm>
+        </Authorized>
+    </AuthorizeView>
+</div>
+
+@code {
+
+    bool IsSubmitting;
+
+    async Task PlaceOrder()
+    {
+        IsSubmitting = true;
+        try
+        {
+            var Response =
+                await HttpClient.PostAsJsonAsync("orders", OrderState.Order);
+            var NewOrderId =
+                await Response.Content.ReadFromJsonAsync<int>();
+            //Listo para otra orden
+            OrderState.ResetOrder();
+            NavigationManager.NavigateTo($"myorders/{NewOrderId}");
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+
+
+    }
+
+    [CascadingParameter]
+    Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var AuthState = await AuthenticationStateTask;
+
+        if (!AuthState.User.Identity.IsAuthenticated)
+        {
+            await LocalStorage.SetAsync(
+                JSRuntime, "currentorder", OrderState.Order);
+            NavigationManager.NavigateTo(
+                "user/signin?redirectUri=/checkout", true);
+        }
+
+        // Intentar recuperar la orden guardada temporalmente
+        if (!OrderState.Order.Pizzas.Any())
+        {
+            var SavedOrder =
+                await LocalStorage.GetAsync<Order>(JSRuntime, "currentorder");
+            if (SavedOrder != null)
+            {
+                // Establecer la orden actual
+                OrderState.ReplaceOrder(SavedOrder);
+                await LocalStorage.DeleteAsync(JSRuntime, "currentorder");
+            }
+            else
+            {
+                // No hay orden, navegar a home
+                NavigationManager.NavigateTo("");
+            }
+        }
+        // En segundo plano, preguntar al usuario si desea ser notificado
+        // con las actualizaciones de la orden
+        await RequestNotificationSubscriptionAsync();
+    }
+
+    async Task RequestNotificationSubscriptionAsync()
+    {
+        var Subscription =
+            await JSRuntime.InvokeAsync<NotificationSubscription>(
+                "blazorPushNotifications.requestSubscription");
+        if(Subscription!=null)
+        {
+            await HttpClient.PutAsJsonAsync(
+                "notifications/subscribe", Subscription);
+        }
+    }
+
+}

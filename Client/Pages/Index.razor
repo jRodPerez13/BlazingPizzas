@@ -2,6 +2,7 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @inject OrderState OrderState
+@inject IJSRuntime JSRuntime
 
 <div class="main">
     <ul class="pizza-cards">
@@ -33,9 +34,7 @@
             {
                 <ConfiguredPizzaItem Pizza="ConfiguredPizza"
                                      OnRemoved=
-                                     "@(() => 
-                                        OrderState.RemoveConfigurePizzaDialog(ConfiguredPizza))"
-                                     />
+                                     "@(() => RemovePizza(ConfiguredPizza))" />
             }
         </div>
     }
@@ -48,20 +47,21 @@
 <div class="order-total @(OrderState.Order.Pizzas.Any()?"":"hidden")">
     Total:
     <span class="total-price">@OrderState.Order.GetFormattedTotalPrice()</span>
-    <button class="btn btn-warning"
-            disabled="@(OrderState.Order.Pizzas.Count == 0)" 
-            @onclick="@PlaceOrder">
+    <a href="checkout" class="btn btn-warning"
+            disabled="@(OrderState.Order.Pizzas.Count == 0)">
         Ordenar >
-    </button>
+    </a>
 </div>
 </div>
 
-@if(OrderState.ShowingConfigureDialog)
-{
+
+
+
+<TemplatedDialog Show="OrderState.ShowingConfigureDialog">
     <ConfigurePizzaDialog Pizza="OrderState.ConfiguringPizza"
                           OnCancel="OrderState.CancelConfigurePizzaDialog"
-                          OnConfirm="OrderState.ConfirmConfigurePizzaDialog"/>
-}
+                          OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
+</TemplatedDialog>
 
 @code{
     List<PizzaSpecial> Specials;
@@ -73,15 +73,14 @@
 
     }
 
-    async Task PlaceOrder()
+    async Task RemovePizza(Pizza configuredPizza)
     {
-        var Response=
-        await HttpClient.PostAsJsonAsync("orders", OrderState.Order);
-        var NewOrderId =
-            await Response.Content.ReadFromJsonAsync<int>();
-        //Listo para otra orden
-        OrderState.ResetOrder();
-        NavigationManager.NavigateTo($"myorders/{NewOrderId}");
+        if(await JSRuntime.Confirm(
+            $"¿Eliminar la pizza {configuredPizza.Special.Name} " +
+            $"de la orden?"))
+        {
+            OrderState.RemoveConfigurePizzaDialog(configuredPizza);
+        }
     }
-    
+
 }

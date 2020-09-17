@@ -1,6 +1,7 @@
 ﻿@using System.Threading
 @inject HttpClient HttpClient
 @implements IDisposable
+@attribute [Authorize]
 
 @page "/myorders/{orderId:int}"
     <div class="main">
@@ -28,6 +29,9 @@
                 <div class="track-order-body">
                     <div class="track-order-details">
                         <OrderReview Order="@OrderWithStatus.Order" />
+                    </div>
+                    <div class="track-order-map">
+                        <Map Markers="OrderWithStatus.MapMarkers" />
                     </div>
                 </div>                
             </div>
