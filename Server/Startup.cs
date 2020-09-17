@@ -32,10 +32,10 @@ namespace BlazingPizza.Server
             // Registrar el contexto de datos
             services.AddDbContext<PizzaStoreContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString(
-                    "PizzaStoreContext"));
+                //Actualizando cadena de conexiÃ³n a Sqlite
+                options.UseSqlite("Data Source=PizzaStore.db");
             });
-            //Autorizacion Twitter y registro del servicio de autenticación
+            //Autorizacion Twitter y registro del servicio de autenticaciï¿½n
             services.AddAuthentication(options => 
             {
                 options.DefaultScheme =
@@ -44,10 +44,11 @@ namespace BlazingPizza.Server
                 .AddCookie()
                 .AddTwitter(twitterOptions =>
                 {
-                    twitterOptions.ConsumerKey=
-                    "U9DbAaVcDPYO3RVFlDo4w";
+                    twitterOptions.ConsumerKey =
+                    Configuration["Authentication:Twitter:ConsumerKey"];
+
                     twitterOptions.ConsumerSecret=
-                    "l6HWZa8F5MJmbBkGSzL6gMjgZMererT5KROxAzws9o";
+                    Configuration["Authentication:Twitter:ConsumerSecret"];
                     twitterOptions.Events.OnRemoteFailure = (context) =>
                     {
                         context.HandleResponse();
