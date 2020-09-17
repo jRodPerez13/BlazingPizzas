@@ -12,3 +12,20 @@ self.addEventListener('fetch', event => {
     // a la red como de costumbre.
     return null
 });
+
+self.addEventListener('push', event => {
+    const payload = event.data.json();
+    event.waitUntil(
+        self.registration.showNotification('Blazing Pizza', {
+            body: payload.message,
+            icon: 'images/icon-512.png',
+            vibrate: [100, 50, 100],
+            data: { url: payload.url }
+        })
+    );
+});
+
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+    event.waitUntil(clients.openWindow(event.notification.data.url));
+});
